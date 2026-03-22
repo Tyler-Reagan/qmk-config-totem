@@ -61,6 +61,7 @@ KEYMAP_DST := totem/keymaps/$(KM)
 
 sync-to-fw:
 	@echo "→ Syncing keymap $(KM) to vial-qmk..."
+	@mkdir -p $(KEYMAP_SRC)
 	cp $(KEYMAP_DST)/keymap.c   $(KEYMAP_SRC)/keymap.c
 	cp $(KEYMAP_DST)/config.h   $(KEYMAP_SRC)/config.h
 	cp $(KEYMAP_DST)/rules.mk   $(KEYMAP_SRC)/rules.mk

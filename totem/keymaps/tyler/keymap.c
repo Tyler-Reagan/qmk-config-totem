@@ -132,7 +132,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              ┌─────────┬─────────┬─────────┬─────────┬──────╨──┐┌──╨──────┬─────────┬─────────┬─────────┬─────────┐
      ╌┄┈┈───═╡         │         │         │         │         ││ SCRNSHT │  PREV   │  VOL-   │  VOL+   │  NEXT   │
              ├─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┤
-             │         │   ALT   │         │   GUI   │         ││ NEW TAB │    ←    │    ↓    │    ↑    │    →    │
+             │   ALT   │  SHIFT  │   GUI   │  CTRL   │         ││ SCRNSHT+│    ←    │    ↓    │    ↑    │    →    │
    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
    │         │         │         │         │         │         ││         │  UNDO   │   CUT   │  COPY   │  PASTE  │  LOCK   │
    └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
@@ -142,7 +142,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
    [_SYS] = LAYOUT(
 //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
               XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   S(C(KC_4)),KC_MPRV, KC_VOLD,  KC_VOLU,  KC_MNXT,
-              XXXXXXX,  KC_LALT,  XXXXXXX,  KC_LGUI,  XXXXXXX,   C(KC_T),  KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,
+              KC_LALT,  KC_LSFT,  KC_LGUI,  KC_LCTL,  XXXXXXX,   S(C(KC_5)),KC_LEFT,  KC_DOWN,  KC_UP,    KC_RGHT,
    XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   XXXXXXX,  C(KC_Z),  C(KC_X),  C(KC_C),  C(KC_V),  C(G(KC_Q)),
                                   XXXXXXX,  XXXXXXX,  XXXXXXX,   C(KC_R),  KC_MPLY,  KC_MUTE
 ),
