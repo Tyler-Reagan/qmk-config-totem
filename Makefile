@@ -1,20 +1,28 @@
 QMK_DIR  := $(HOME)/vial-qmk
 KB       := geigeigeist/totem
-KM       := vial
-TARGET   := geigeigeist_totem_vial
+KM       ?= tyler
+TARGET   := geigeigeist_totem_$(KM)
 UF2      := $(TARGET).uf2
+OUT_DIR  := firmware
+
+# Available keymaps:
+#   tyler  — ZMK-ported personal layout, Vial-compatible (default)
+#   vial   — original geist layout, Vial-compatible
+#   default — upstream default layout (no Vial)
 
 .PHONY: help compile flash-left flash-right sync-to-fw sync-from-fw commit
 
 help:
 	@echo "TOTEM QMK workflow"
 	@echo ""
-	@echo "  make compile       Build firmware (produces $(UF2))"
+	@echo "  make compile       Build firmware → $(OUT_DIR)/$(UF2)  [KM=$(KM)]"
 	@echo "  make flash-left    Compile + flash left half (sets EE_HANDS handedness)"
 	@echo "  make flash-right   Compile + flash right half (sets EE_HANDS handedness)"
 	@echo "  make sync-to-fw    Copy keymap from this repo → vial-qmk (before compile)"
 	@echo "  make sync-from-fw  Copy UF2 + updated keyboard files from vial-qmk → here"
 	@echo "  make commit        Stage all changes and open git commit"
+	@echo ""
+	@echo "Override keymap:  make compile KM=vial"
 	@echo ""
 	@echo "Typical first-time flash workflow:"
 	@echo "  1. make sync-to-fw"
@@ -25,14 +33,15 @@ help:
 	@echo ""
 	@echo "Subsequent updates (handedness already set in EEPROM):"
 	@echo "  1. make sync-to-fw && make compile"
-	@echo "  2. Drag-drop $(UF2) onto each half mounted as USB drive"
+	@echo "  2. Drag-drop $(OUT_DIR)/$(UF2) onto each half mounted as USB drive"
 
 # ── Build ─────────────────────────────────────────────────────────────────────
 
 compile: sync-to-fw
 	cd $(QMK_DIR) && qmk compile -kb $(KB) -km $(KM)
-	cp $(QMK_DIR)/$(UF2) ./$(UF2)
-	@echo "✓ $(UF2) ready"
+	@mkdir -p $(OUT_DIR)
+	cp $(QMK_DIR)/$(UF2) $(OUT_DIR)/$(UF2)
+	@echo "✓ $(OUT_DIR)/$(UF2) ready"
 
 # ── Flash ─────────────────────────────────────────────────────────────────────
 # flash-left / flash-right write EE_HANDS handedness to the XIAO's emulated
@@ -51,7 +60,7 @@ KEYMAP_SRC := $(QMK_DIR)/keyboards/$(KB)/keymaps/$(KM)
 KEYMAP_DST := totem/keymaps/$(KM)
 
 sync-to-fw:
-	@echo "→ Syncing keymap to vial-qmk..."
+	@echo "→ Syncing keymap $(KM) to vial-qmk..."
 	cp $(KEYMAP_DST)/keymap.c   $(KEYMAP_SRC)/keymap.c
 	cp $(KEYMAP_DST)/config.h   $(KEYMAP_SRC)/config.h
 	cp $(KEYMAP_DST)/rules.mk   $(KEYMAP_SRC)/rules.mk
@@ -60,7 +69,8 @@ sync-to-fw:
 
 sync-from-fw:
 	@echo "← Syncing from vial-qmk..."
-	cp $(QMK_DIR)/$(UF2)                            ./$(UF2)
+	@mkdir -p $(OUT_DIR)
+	cp $(QMK_DIR)/$(UF2)                            $(OUT_DIR)/$(UF2)
 	cp $(QMK_DIR)/keyboards/$(KB)/config.h          totem/config.h
 	cp $(QMK_DIR)/keyboards/$(KB)/keyboard.json     totem/keyboard.json
 	cp $(QMK_DIR)/keyboards/$(KB)/totem.c           totem/totem.c

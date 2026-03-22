@@ -9,14 +9,25 @@
 A 38-key column-staggered split keyboard running [Vial](https://get.vial.today/) (a fork of [QMK](https://docs.qmk.fm/)) on two [Seeed XIAO RP2040](https://wiki.seeedstudio.com/XIAO-RP2040/) microcontrollers.
 
 - **Hardware files & build guide:** [GEIGEIGEIST/TOTEM](https://github.com/GEIGEIGEIST/TOTEM)
-- **ZMK config (wireless):** [GEIGEIGEIST/zmk-config-totem](https://github.com/GEIGEIGEIST/zmk-config-totem)
+- **ZMK config (wireless):** see `zmk-config-studio/` — same layout, wireless variant
 - **Firmware source:** [vial-qmk](https://github.com/vial-kb/vial-qmk) fork at `~/vial-qmk`
+
+### Keymaps
+
+| Keymap | Description |
+|---|---|
+| `tyler` | Personal layout — QMK/Vial port of the ZMK keymap. **Default.** |
+| `vial` | Original geist layout (Colemak + QWERTY + Lower/Raise/Adjust), Vial-compatible |
+| `default` | Upstream default layout, no Vial support |
+
+Build a specific keymap with `make compile KM=vial`. All Makefile targets respect `KM`.
 
 ![TOTEM layout](/docs/images/TOTEM_layout.svg)
 
 ---
 
-## Prerequisites
+<details>
+<summary><strong>Prerequisites</strong></summary>
 
 ### 1. Vial-QMK firmware repo
 
@@ -63,9 +74,12 @@ qmk setup
 xcode-select --install   # macOS — provides make, git, etc.
 ```
 
+</details>
+
 ---
 
-## Bootloader mode (Seeed XIAO RP2040)
+<details>
+<summary><strong>Bootloader mode (Seeed XIAO RP2040)</strong></summary>
 
 The XIAO must be in bootloader mode before it will accept a firmware flash. It appears as a USB mass storage device named **`RPI-RP2`**.
 
@@ -79,13 +93,16 @@ The XIAO must be in bootloader mode before it will accept a firmware flash. It a
 3. Release `BOOT`. The `RPI-RP2` drive mounts.
 
 **Method 3 — QMK `QK_BOOT` key**
-If the keyboard is already running QMK firmware, tap the `QK_BOOT` key in your keymap (it's on the ADJUST layer by default). The half you triggered it on will enter bootloader mode.
+If the keyboard is already running QMK firmware, tap the `QK_BOOT` key in your keymap (BOOT layer outer-pinky keys in the `tyler` keymap; ADJUST layer in `vial`/`default`). The half you triggered it on will enter bootloader mode.
 
 > Flash **one half at a time**. Disconnect the TRRS/serial cable between halves while flashing.
 
+</details>
+
 ---
 
-## Makefile workflow
+<details>
+<summary><strong>Makefile workflow</strong></summary>
 
 Run `make` or `make help` from the repo root to see all targets.
 
@@ -108,16 +125,16 @@ Each command syncs your keymap to `~/vial-qmk`, compiles, and waits for the XIAO
 Handedness is already stored in EEPROM, so you can flash either half with the plain UF2:
 
 ```sh
-make compile          # builds geigeigeist_totem_vial.uf2 and copies it here
+make compile          # builds firmware/geigeigeist_totem_tyler.uf2
 ```
 
 Then either:
 - Let `qmk flash` detect the device, **or**
-- Drag-drop `geigeigeist_totem_vial.uf2` onto the `RPI-RP2` drive manually (both halves, one at a time).
+- Drag-drop the UF2 from the `firmware/` directory onto the `RPI-RP2` drive manually (both halves, one at a time).
 
 ### Editing keymaps
 
-Edit files under `totem/keymaps/vial/`, then:
+Edit files under `totem/keymaps/tyler/` (or `totem/keymaps/vial/` for the geist layout), then:
 
 ```sh
 make compile          # auto-syncs to ~/vial-qmk, compiles, copies UF2 back
@@ -127,16 +144,19 @@ make compile          # auto-syncs to ~/vial-qmk, compiles, copies UF2 back
 
 | Target | Description |
 |---|---|
-| `make compile` | Sync keymap → vial-qmk, compile, copy UF2 here |
+| `make compile` | Sync keymap → vial-qmk, compile, copy UF2 to `firmware/` |
 | `make flash-left` | Compile + flash left half (writes EE_HANDS to EEPROM) |
 | `make flash-right` | Compile + flash right half (writes EE_HANDS to EEPROM) |
 | `make sync-to-fw` | Copy keymap files from this repo → vial-qmk |
 | `make sync-from-fw` | Copy UF2 + keyboard definition files from vial-qmk → here |
 | `make commit` | Stage changes in both repos and open git commit |
 
+</details>
+
 ---
 
-## GUI tools
+<details>
+<summary><strong>GUI tools</strong></summary>
 
 ### Vial (recommended)
 
@@ -161,7 +181,7 @@ make compile          # auto-syncs to ~/vial-qmk, compiles, copies UF2 back
 [QMK Toolbox](https://github.com/qmk/qmk_toolbox/releases) is a GUI for flashing firmware — useful if you prefer not to use the command line.
 
 1. Open QMK Toolbox.
-2. Click **Open** and select `geigeigeist_totem_vial.uf2`.
+2. Click **Open** and select the UF2 from the `firmware/` directory (e.g. `firmware/geigeigeist_totem_tyler.uf2`).
 3. Put your XIAO into bootloader mode (see above). QMK Toolbox detects it automatically.
 4. Click **Flash**.
 5. Repeat for the other half.
@@ -172,9 +192,12 @@ make compile          # auto-syncs to ~/vial-qmk, compiles, copies UF2 back
 
 [QMK Configurator](https://config.qmk.fm/) is a browser-based keymap builder for stock QMK. It does **not** support Vial firmware. If you want a browser-based GUI, use [usevia.app](https://usevia.app/) or the Vial desktop app instead.
 
+</details>
+
 ---
 
-## FAQ
+<details>
+<summary><strong>FAQ</strong></summary>
 
 **Q: Why is there only one UF2 for a split keyboard?**
 Both halves run identical firmware. The RP2040 scans its own 4×5 key matrix (19 keys) and sends the result to the master half via the serial link on GP0/GP1. `EE_HANDS` tells each half whether its keys occupy the left or right half of the full 8×5 matrix. The single UF2 handles both — handedness is the only difference, and it lives in EEPROM.
@@ -213,4 +236,6 @@ git -C ~/vial-qmk/lib/pico-sdk checkout HEAD -- .
 ```
 
 **Q: Can I use ZMK instead of QMK for wireless?**
-Yes — see [GEIGEIGEIST/zmk-config-totem](https://github.com/GEIGEIGEIST/zmk-config-totem). ZMK targets the XIAO BLE variant, not the RP2040.
+Yes — see [GEIGEIGEIST/zmk-config-totem](https://github.com/GEIGEIGEIST/TOTEM). ZMK targets the XIAO BLE variant, not the RP2040.
+
+</details>
