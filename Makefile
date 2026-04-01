@@ -58,10 +58,13 @@ flash-right: sync-to-fw
 
 KEYMAP_SRC := $(QMK_DIR)/keyboards/$(KB)/keymaps/$(KM)
 KEYMAP_DST := totem/keymaps/$(KM)
+BOARD_SRC  := $(QMK_DIR)/keyboards/$(KB)
+BOARD_DST  := totem
 
 sync-to-fw:
 	@echo "→ Syncing keymap $(KM) to vial-qmk..."
 	@mkdir -p $(KEYMAP_SRC)
+	cp $(BOARD_DST)/config.h    $(BOARD_SRC)/config.h
 	cp $(KEYMAP_DST)/keymap.c   $(KEYMAP_SRC)/keymap.c
 	cp $(KEYMAP_DST)/config.h   $(KEYMAP_SRC)/config.h
 	cp $(KEYMAP_DST)/rules.mk   $(KEYMAP_SRC)/rules.mk
