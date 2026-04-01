@@ -110,7 +110,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
              ├─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┤
              │   GUI   │   ALT   │  CTRL   │  SHIFT  │         ││    _    │    [    │    ]    │    '    │    $    │
    ┌─────────┼─────────┼─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┼─────────┼─────────┐
-   │         │         │         │         │         │         ││         │    &    │    |    │    *    │         │ SHFT TAB│
+   │         │         │         │         │         │         ││         │    &    │    \    │    *    │         │ SHFT TAB│
    └─────────┴─────────┴─────────┼─────────┼─────────┼─────────┤├─────────┼─────────┼─────────┼─────────┴─────────┴─────────┘
                                  │         │         │         ││    @    │    (    │    )    │
                                  └─────────┴─────────┴─────────┘└─────────┴─────────┴─────────┘ */
@@ -119,7 +119,7 @@ const uint16_t PROGMEM keymaps[][MATRIX_ROWS][MATRIX_COLS] = {
 //╷         ╷         ╷         ╷         ╷         ╷         ╷╷         ╷         ╷         ╷         ╷         ╷         ╷
               XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   KC_MINS,  KC_LCBR,  KC_RCBR,  KC_GRV,   KC_EQL,
               KC_LGUI,  KC_LALT,  KC_LCTL,  KC_LSFT,  XXXXXXX,   KC_UNDS,  KC_LBRC,  KC_RBRC,  KC_QUOT,  KC_DLR,
-   XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   XXXXXXX,  KC_AMPR,  KC_PIPE,  KC_ASTR,  XXXXXXX,  S(KC_TAB),
+   XXXXXXX,   XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,  XXXXXXX,   XXXXXXX,  KC_AMPR,  KC_BSLS,  KC_ASTR,  XXXXXXX,  S(KC_TAB),
                                   XXXXXXX,  XXXXXXX,  XXXXXXX,   KC_AT,    KC_LPRN,  KC_RPRN
 ),
 
