@@ -84,6 +84,8 @@ xcode-select --install   # macOS — provides make, git, etc.
 The XIAO must be in bootloader mode before it will accept a firmware flash. It appears as a USB mass storage device named **`RPI-RP2`**.
 
 **Method 1 — Double-tap reset (recommended, works any time)**
+> **First-time flash:** A brand-new XIAO RP2040 does not have this firmware yet, so double-tap reset will not work until after the first flash. Use Method 2 for the very first flash on each controller.
+
 1. Tap the `RESET` button on the XIAO twice in quick succession (~500 ms).
 2. The `RPI-RP2` drive mounts on your computer.
 
@@ -109,6 +111,8 @@ Run `make` or `make help` from the repo root to see all targets.
 ### First-time flash (sets handedness in EEPROM)
 
 Both halves run identical firmware. The `EE_HANDS` setting stores which side each XIAO is on in its emulated EEPROM. You only need to do this once per controller.
+
+> **New controller:** A brand-new XIAO RP2040 ships without this firmware, so double-tap reset will not work yet. Enter bootloader mode manually for the first flash: hold `BOOT`, plug in USB, then release `BOOT`. After the first flash, double-tap reset works for all future updates.
 
 ```sh
 # Step 1 — plug in LEFT half solo (no TRRS), put it in bootloader mode
@@ -234,6 +238,9 @@ The `lib/pico-sdk` submodule directory is empty. Fix:
 ```sh
 git -C ~/vial-qmk/lib/pico-sdk checkout HEAD -- .
 ```
+
+**Q: Double-tap reset isn't working on my new XIAO RP2040.**
+Double-tap reset requires this firmware to already be flashed — a factory-fresh XIAO doesn't have it. For the very first flash, hold the `BOOT` button on the XIAO, plug in USB, then release `BOOT`. The `RPI-RP2` drive will mount and you can flash normally. Double-tap reset will work for every subsequent flash.
 
 **Q: Can I use ZMK instead of QMK for wireless?**
 Yes — see [GEIGEIGEIST/zmk-config-totem](https://github.com/GEIGEIGEIST/TOTEM). ZMK targets the XIAO BLE variant, not the RP2040.
